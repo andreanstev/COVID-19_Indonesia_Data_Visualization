@@ -3,7 +3,7 @@ import re
 import pandas as pd
 import matplotlib.pyplot as plt
 #df = pd.read_json("https://data.covid19.go.id/public/api/update.json")
-with open(r'C:\Users\Lenovo\Desktop\cov19.json') as f:
+with open(r'D:\Myproject\pycode\data_analysis_covid19_indonesia\cov19-060820.json') as f:
     data_json = json.loads(f.read())
 #print(data_json["update"])
 df=pd.DataFrame(data_json)
@@ -29,26 +29,16 @@ dataharian_n = dataharian.iloc[157-n:157]
 #print(dataharian_n)
 
 #Mengubah tipe data dict values menjadi list
-n=0
-for i in dataharian_n["jumlah_meninggal"]:
-    dataharian_n["jumlah_meninggal"].iloc[n] = list(dataharian_n["jumlah_meninggal"].iloc[n].values())
-    #print(dataharian_n["jumlah_meninggal"].iloc[n])
-    n+=1
-n=0
-for i in dataharian_n["jumlah_sembuh"]:
-    dataharian_n["jumlah_sembuh"].iloc[n] = list(dataharian_n["jumlah_sembuh"].iloc[n].values())
-    #print(dataharian_n["jumlah_sembuh"].iloc[n])
-    n+=1
-n=0
-for i in dataharian_n["jumlah_positif"]:
-    dataharian_n["jumlah_positif"].iloc[n] = list(dataharian_n["jumlah_positif"].iloc[n].values())
-    #print(dataharian_n["jumlah_positif"].iloc[n])
-    n+=1
-n=0
-for i in dataharian_n["jumlah_dirawat"]:
-    dataharian_n["jumlah_dirawat"].iloc[n] = list(dataharian_n["jumlah_dirawat"].iloc[n].values())
-    #print(dataharian_n["jumlah_dirawat"].iloc[n])
-    n+=1
+def valueformat(df_col):
+    n=0
+    for i in df_col:
+        df_col.iloc[n] = list(df_col.iloc[n].values())
+        n+=1
+    return df_col
+dataharian_n["jumlah_meninggal"] = valueformat(dataharian_n["jumlah_meninggal"])
+dataharian_n["jumlah_sembuh"] = valueformat(dataharian_n["jumlah_sembuh"])
+dataharian_n["jumlah_positif"] = valueformat(dataharian_n["jumlah_positif"])
+dataharian_n["jumlah_dirawat"] = valueformat(dataharian_n["jumlah_dirawat"])
 
 #Mengganti format tanggal 
 n=0
@@ -62,7 +52,6 @@ dataharian_n = dataharian_n.rename(columns={"key_as_string": "Tanggal"})
 print(dataharian_n)
 
 #dataharian_n = dataharian_n.set_index('Tanggal')
-
 x_data = []
 for i in dataharian_n['Tanggal']:
     x_data.append(i)
