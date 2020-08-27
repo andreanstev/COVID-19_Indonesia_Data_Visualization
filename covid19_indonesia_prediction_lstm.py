@@ -52,7 +52,7 @@ model.add(Dense(ft))
 model.compile(optimizer = keras.optimizers.Adam(learning_rate=learning_rate), loss = 'mean_squared_error')
 model.fit(x_train, y_train, batch_size=1, epochs=epoch)
 
-test_data = scaled_dataset[training_data_len-(inp+h):training_data_len,:] #522 sampai 642, test_data.shape = (60, 1)
+test_data = scaled_dataset[training_data_len-(inp+h):training_data_len,:]
 x_test = []
 y_test = []
 for i in range(inp, len(test_data)):
