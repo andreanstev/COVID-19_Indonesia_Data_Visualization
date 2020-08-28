@@ -84,6 +84,8 @@ plot1 = plt.plot(x_data, y_data1, color = 'r',label = 'Jumlah Meninggal')
 plot2 = plt.plot(x_data, y_data2, color = 'b',label = 'Jumlah Sembuh')
 plot3 = plt.plot(x_data, y_data3, color = 'm',label = 'Jumlah Positif')
 plot4 = plt.plot(x_data, y_data4, color = 'y',label = 'Jumlah Dirawat')
+highest_index = y_data3.index([pd.Series(y_data3).max()[0]]) #Mencari index dengan tingkat jumlah positif tertinggi
+print(x_data[129]) #Mencari tanggal dengan tingkat jumlah positif tertinggi
 plt.xlabel("Tanggal")
 plt.ylabel("Jumlah Penambahan")
 plt.title("Grafik Laju Penambahan Kasus COVID-19")
