@@ -1,1 +1,1 @@
-
+I took the COVID-29 data from the data bank and convert it from JSON to CSV, so it can be easier to manipulate with pandas. The I visualize the case data so it will be easier to get the insight from the data.
