@@ -1,1 +1,1 @@
-I took the COVID-29 data from the data.covid19.go.id and convert it from JSON to CSV, so it can be easier to manipulate with pandas. Then I visualize the case data so it will be easier to get the insight from the data.
+I took the COVID-29 data from the data.covid19.go.id and convert it from JSON to CSV, so it can be easier to manipulate with pandas. Then I visualize the case data in time series plot so it will be easier to get the insight from the data.
