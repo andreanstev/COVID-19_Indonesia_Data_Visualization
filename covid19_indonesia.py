@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 #df = pd.read_json("https://data.covid19.go.id/public/api/update.json")
 with open(r'D:\Myproject\pycode\data_analysis_covid19_indonesia\cov19-060820.json') as f:
     data_json = json.loads(f.read())
+fig,ax=plt.subplots(1,1,figsize=(12,6))
 #print(data_json["update"])
 df=pd.DataFrame(data_json)
 #Dict data penambahan kasus COVID19
@@ -31,7 +32,7 @@ dataharian_n = dataharian.iloc[157-n:157]
 def valueformat(df_col):
     n=0
     for i in df_col:
-        df_col.iloc[n] = list(df_col.iloc[n].values())
+        df_col.iloc[n] = list(df_col.iloc[n].values())[0]
         n+=1
     return df_col
 dataharian_n["jumlah_meninggal"] = valueformat(dataharian_n["jumlah_meninggal"])
@@ -51,55 +52,30 @@ for i in dataharian_n["key_as_string"]:
     #print(dataharian_n["jumlah_dirawat"].iloc[n])
     n+=1
 dataharian_n = dataharian_n.rename(columns={"key_as_string": "Tanggal"})
-#dataharian_n['Tanggal'] = pd.to_datetime(dataharian_n['Tanggal'])
-print(dataharian_n)
+dataharian_n['Tanggal'] = pd.to_datetime(dataharian_n['Tanggal'], format='%Y/%m/%d')
 
-#Mengkopi data kolom ke variabel list
-def plotvalue(df_col,list_col):
-    for i in df_col:
-        list_col.append(i)
-        
-x_data = []
-plotvalue(dataharian_n['Tanggal'], x_data)
-y_data1 = []
-plotvalue(dataharian_n['jumlah_meninggal'], y_data1)
-y_data2 = []
-plotvalue(dataharian_n['jumlah_sembuh'], y_data2)
-y_data3 = []
-plotvalue(dataharian_n['jumlah_positif'], y_data3)
-y_data4 = []
-plotvalue(dataharian_n['jumlah_dirawat'], y_data4)
-y_data1_kum = []
-plotvalue(dataharian_n['jumlah_meninggal_kum'], y_data1_kum)
-y_data2_kum = []
-plotvalue(dataharian_n['jumlah_sembuh_kum'], y_data2_kum)
-y_data3_kum = []
-plotvalue(dataharian_n['jumlah_positif_kum'], y_data3_kum)
-y_data4_kum = []
-plotvalue(dataharian_n['jumlah_dirawat_kum'], y_data4_kum)
-x_data = pd.to_datetime(x_data, format='%Y/%m/%d')
-
-#Grafik garis
-plot1 = plt.plot(x_data, y_data1, color = 'r',label = 'Jumlah Meninggal')
-plot2 = plt.plot(x_data, y_data2, color = 'b',label = 'Jumlah Sembuh')
-plot3 = plt.plot(x_data, y_data3, color = 'm',label = 'Jumlah Positif')
-plot4 = plt.plot(x_data, y_data4, color = 'y',label = 'Jumlah Dirawat')
-highest_index = y_data3.index([pd.Series(y_data3).max()[0]]) #Mencari index dengan tingkat jumlah positif tertinggi
-print(x_data[129]) #Mencari tanggal dengan tingkat jumlah positif tertinggi
-plt.xlabel("Tanggal")
-plt.ylabel("Jumlah Penambahan")
-plt.title("Grafik Laju Penambahan Kasus COVID-19")
-plt.legend()
-plt.show()
-
-#Grafik garis
-plot1 = plt.plot(x_data, y_data1_kum, color = 'r',label = 'Jumlah Meninggal')
-plot2 = plt.plot(x_data, y_data2_kum, color = 'b',label = 'Jumlah Sembuh')
-plot3 = plt.plot(x_data, y_data3_kum, color = 'm',label = 'Jumlah Positif')
-plot4 = plt.plot(x_data, y_data4_kum, color = 'y',label = 'Jumlah Dirawat')
+#Grafik garis jumlah penambahan
+plot1 = plt.plot(dataharian_n['Tanggal'], dataharian_n['jumlah_meninggal'], color = 'r',label = 'Jumlah Meninggal')
+plot2 = plt.plot(dataharian_n['Tanggal'], dataharian_n['jumlah_sembuh'], color = 'b',label = 'Jumlah Sembuh')
+plot3 = plt.plot(dataharian_n['Tanggal'], dataharian_n['jumlah_positif'], color = 'm',label = 'Jumlah Positif')
+plot4 = plt.plot(dataharian_n['Tanggal'], dataharian_n['jumlah_dirawat'], color = 'y',label = 'Jumlah Dirawat')
+print("Tingkat positif tertinggi: {}".format(dataharian_n['jumlah_positif'].max()))
+print("Di tanggal: ")
+print(dataharian_n['Tanggal'].loc[dataharian_n['jumlah_positif']==dataharian_n['jumlah_positif'].max()])
+#plt.annotate("Jumlah penambahan\n positif tertinggi\n%.4f"%highest,(200,200),(200,200),ha="lef t",color='m')
 plt.xlabel("Tanggal")
 plt.ylabel("Jumlah Kasus")
-plt.title("Grafik Kasus COVID-19 Kumulatif")
+plt.title("Grafik Laju Penambahan Kasus COVID-19 2 Maret 2020 - 5 Agustus 2020")
 plt.legend()
 plt.show()
 
+#Grafik garis jumlah kumulatif
+plot1 = plt.plot(dataharian_n['Tanggal'], dataharian_n['jumlah_meninggal_kum'], color = 'r',label = 'Jumlah Meninggal')
+plot2 = plt.plot(dataharian_n['Tanggal'], dataharian_n['jumlah_sembuh_kum'], color = 'b',label = 'Jumlah Sembuh')
+plot3 = plt.plot(dataharian_n['Tanggal'], dataharian_n['jumlah_positif_kum'], color = 'm',label = 'Jumlah Positif')
+plot4 = plt.plot(dataharian_n['Tanggal'], dataharian_n['jumlah_dirawat_kum'], color = 'y',label = 'Jumlah Dirawat')
+plt.xlabel("Tanggal")
+plt.ylabel("Jumlah Kasus")
+plt.title("Grafik Kasus COVID-19 Kumulatif 2 Maret 2020 - 5 Agustus 2020")
+plt.legend()
+plt.show()
